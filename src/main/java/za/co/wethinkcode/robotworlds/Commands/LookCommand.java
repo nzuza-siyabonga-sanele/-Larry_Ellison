@@ -1,4 +1,7 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.Commands;
+
+import za.co.wethinkcode.robotworlds.world.Position;
+import za.co.wethinkcode.robotworlds.world.Robot;
 
 public class LookCommand extends Command {
 

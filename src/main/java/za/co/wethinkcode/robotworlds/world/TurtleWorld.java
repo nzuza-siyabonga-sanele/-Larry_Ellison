@@ -1,6 +1,5 @@
 package za.co.wethinkcode.robotworlds.world;
 
-import za.co.wethinkcode.robotworlds.Position;
 import za.co.wethinkcode.robotworlds.maze.Maze;
 
 import java.util.List;

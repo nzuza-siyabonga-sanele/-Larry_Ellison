@@ -1,8 +1,14 @@
 package za.co.wethinkcode.robotworlds;
 
 import org.junit.jupiter.api.Test;
+import za.co.wethinkcode.robotworlds.Commands.Command;
+import za.co.wethinkcode.robotworlds.Commands.ForwardCommand;
+import za.co.wethinkcode.robotworlds.Commands.HelpCommand;
+import za.co.wethinkcode.robotworlds.Commands.ShutdownCommand;
 import za.co.wethinkcode.robotworlds.maze.EmptyMaze;
 import za.co.wethinkcode.robotworlds.world.IWorld;
+import za.co.wethinkcode.robotworlds.world.Position;
+import za.co.wethinkcode.robotworlds.world.Robot;
 import za.co.wethinkcode.robotworlds.world.TextWorld;
 
 import static org.junit.Assert.assertEquals;

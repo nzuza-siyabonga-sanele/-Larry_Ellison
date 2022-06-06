@@ -1,4 +1,4 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.world;
 
 public class Position {
     private final int x;

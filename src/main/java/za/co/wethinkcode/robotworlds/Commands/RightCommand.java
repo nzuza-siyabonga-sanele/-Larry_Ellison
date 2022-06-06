@@ -1,6 +1,8 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.Commands;
 
-public class RightCommand extends Command{
+import za.co.wethinkcode.robotworlds.world.Robot;
+
+public class RightCommand extends Command {
 
     @Override
     public boolean execute(Robot target) {

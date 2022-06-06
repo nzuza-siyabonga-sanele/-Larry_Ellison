@@ -1,6 +1,8 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.Commands;
 
-public class LeftCommand extends Command{
+import za.co.wethinkcode.robotworlds.world.Robot;
+
+public class LeftCommand extends Command {
 
     @Override
     public boolean execute(Robot target) {

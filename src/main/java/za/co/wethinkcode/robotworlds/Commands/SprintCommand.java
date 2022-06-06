@@ -1,8 +1,9 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.Commands;
 
+import za.co.wethinkcode.robotworlds.world.Robot;
 import za.co.wethinkcode.robotworlds.world.IWorld;
 
-public class SprintCommand extends Command{
+public class SprintCommand extends Command {
 
         @Override
         public boolean execute(Robot target) {

@@ -1,6 +1,7 @@
 package za.co.wethinkcode.robotworlds;
 
 import org.junit.jupiter.api.Test;
+import za.co.wethinkcode.robotworlds.world.Position;
 
 import static org.junit.jupiter.api.Assertions.*;
 

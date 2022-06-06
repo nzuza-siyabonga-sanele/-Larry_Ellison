@@ -1,6 +1,7 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.world;
 
 import org.json.JSONObject;
+import za.co.wethinkcode.robotworlds.Commands.Command;
 import za.co.wethinkcode.robotworlds.world.*;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ public class Robot extends JSONObject {
     public IWorld world;
 
 
-    int shots= 5;
+    public int shots= 5;
 
     private int shield = 3;
 
@@ -89,5 +90,9 @@ public class Robot extends JSONObject {
 
     public Position getPosition() {
        return this.getWorld().getPosition();
+    }
+
+    public void repair() {
+
     }
 }

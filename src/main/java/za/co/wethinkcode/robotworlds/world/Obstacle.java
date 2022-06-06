@@ -1,7 +1,5 @@
 package za.co.wethinkcode.robotworlds.world;
 
-import za.co.wethinkcode.robotworlds.Position;
-
 /**
  * Defines an interface for obstacles you want to place in your world.
  */

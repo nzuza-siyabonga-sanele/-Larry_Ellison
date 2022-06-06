@@ -1,6 +1,8 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.Client;
 
 import org.json.JSONObject;
+import za.co.wethinkcode.robotworlds.Commands.Command;
+import za.co.wethinkcode.robotworlds.world.Robot;
 import za.co.wethinkcode.robotworlds.maze.*;
 import za.co.wethinkcode.robotworlds.world.*;
 import za.co.wethinkcode.robotworlds.world.AbstractWorld;
@@ -13,7 +15,6 @@ import java.util.Scanner;
 
 public class Play {
     static Scanner scanner;
-    
 
     public static void main(String[] args) throws Exception {
         int count = 0;
@@ -41,9 +42,6 @@ public class Play {
             dout.writeUTF(json.toString());
             dout.flush();
         }
-
-
-
 
         boolean shouldContinue = true;
         do {
@@ -76,9 +74,6 @@ public class Play {
         s.close();
 
     }
-
-
-
 
     static String getInput(String prompt) {
         Scanner scanner = new Scanner(System.in);

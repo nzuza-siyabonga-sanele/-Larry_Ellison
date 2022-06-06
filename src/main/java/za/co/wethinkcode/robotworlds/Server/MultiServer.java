@@ -1,5 +1,4 @@
-package za.co.wethinkcode.robotworlds;
-
+package za.co.wethinkcode.robotworlds.Server;
 
 import java.net.*;
 import java.io.*;
@@ -7,10 +6,9 @@ import java.io.*;
 
 public class MultiServer {
 
-
     public static void main(String[] args) throws IOException {
 
-        ServerSocket s = new ServerSocket( Server.PORT);
+        ServerSocket s = new ServerSocket(Server.PORT);
         System.out.println("Server running & waiting for client connections.");
 
         while(true) {

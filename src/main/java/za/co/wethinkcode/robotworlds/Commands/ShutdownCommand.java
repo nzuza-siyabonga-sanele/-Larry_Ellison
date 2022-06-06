@@ -1,4 +1,6 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.Commands;
+
+import za.co.wethinkcode.robotworlds.world.Robot;
 
 public class ShutdownCommand extends Command {
     public ShutdownCommand() {
