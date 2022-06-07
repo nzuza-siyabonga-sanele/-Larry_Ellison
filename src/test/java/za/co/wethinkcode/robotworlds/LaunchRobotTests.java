@@ -62,7 +62,7 @@ class LaunchRobotTests {
         // Given that I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
 
-        // When I send a invalid launch request with the command "luanch" instead of "launch"
+        // When I send an invalid launch request with the command "luanch" instead of "launch"
         String request = "{" +
                 "\"robot\": \"HAL\"," +
                 "\"command\": \"luanch\"," +
@@ -81,7 +81,7 @@ class LaunchRobotTests {
     }
 
     @Test
-    void validlaunchNoFreeLocation(){
+    void validLaunchNoFreeLocation(){
 
         // Given that I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());

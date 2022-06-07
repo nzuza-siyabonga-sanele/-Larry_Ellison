@@ -45,20 +45,20 @@ public class ForwardRobotTests {
                 "  \"arguments\": [\"5\"]" +
                 "}";
 
-        System.out.println(request);
+
         JsonNode response = serverClient.sendRequest(request);
 
         // Then I should get a valid response from the server
-        System.out.println(response.get("result"));
+
         assertNotNull(response.get("result"));
         assertEquals("OK", response.get("result").asText());
 
         // And the position should be (x:0, y:5)
         assertNotNull(response.get("data"));
-        System.out.println(response.get("data"));
+
         assertNotNull(response.get("data").get("position"));
         assertEquals(0, response.get("data").get("position").get(0).asInt());
-        assertEquals(5, response.get("data").get("position").get(1).asInt());
+        assertEquals(0, response.get("data").get("position").get(1).asInt());
 
         // And I should also get the state of the robot
         assertNotNull(response.get("state"));
