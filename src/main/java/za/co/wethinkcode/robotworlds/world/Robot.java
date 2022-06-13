@@ -2,6 +2,7 @@ package za.co.wethinkcode.robotworlds.world;
 
 import org.json.JSONObject;
 import za.co.wethinkcode.robotworlds.Commands.Command;
+import za.co.wethinkcode.robotworlds.Server.Server;
 import za.co.wethinkcode.robotworlds.world.*;
 
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class Robot extends JSONObject {
     private int shield = 3;
 
     public String getPrint = "";
+
 
     public Robot(String name,IWorld world) {
         this.name = name;
