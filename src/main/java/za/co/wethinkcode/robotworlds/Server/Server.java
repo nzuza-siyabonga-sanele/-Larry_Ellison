@@ -1,4 +1,4 @@
-package za.co.wethinkcode.robotworlds;
+package za.co.wethinkcode.robotworlds.Server;
 
 import java.io.*;
 import java.net.Socket;
@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONObject;
 import za.co.wethinkcode.robotworlds.Commands.Command;
 import za.co.wethinkcode.robotworlds.Commands.createCommand;
+import za.co.wethinkcode.robotworlds.Json;
 import za.co.wethinkcode.robotworlds.maze.EmptyMaze;
 import za.co.wethinkcode.robotworlds.world.AbstractWorld;
 import za.co.wethinkcode.robotworlds.world.IWorld;

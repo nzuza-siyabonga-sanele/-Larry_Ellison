@@ -15,8 +15,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import static za.co.wethinkcode.robotworlds.Server.OBJECT_MAPPER;
-
+import static za.co.wethinkcode.robotworlds.Server.Server.OBJECT_MAPPER;
 
 public class Play {
 

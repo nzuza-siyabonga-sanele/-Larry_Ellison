@@ -2,7 +2,7 @@ package za.co.wethinkcode.robotworlds.world;
 
 import za.co.wethinkcode.robotworlds.Commands.Command;
 import za.co.wethinkcode.robotworlds.Json;
-import za.co.wethinkcode.robotworlds.Server;
+import za.co.wethinkcode.robotworlds.Server.Server;
 
 import java.util.ArrayList;
 

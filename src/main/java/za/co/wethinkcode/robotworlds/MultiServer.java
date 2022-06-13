@@ -2,9 +2,8 @@ package za.co.wethinkcode.robotworlds;
 
 import java.net.*;
 import java.io.*;
-import java.util.HashMap;
 
-import za.co.wethinkcode.robotworlds.Server;
+import za.co.wethinkcode.robotworlds.Server.Server;
 import za.co.wethinkcode.robotworlds.maze.EmptyMaze;
 import za.co.wethinkcode.robotworlds.world.AbstractWorld;
 
