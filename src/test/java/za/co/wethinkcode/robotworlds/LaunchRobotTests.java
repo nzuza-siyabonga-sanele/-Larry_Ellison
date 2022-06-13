@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import za.co.wethinkcode.robots.server.RobotWorldClient;
+import za.co.wethinkcode.robotworlds.Client.Play;
 import za.co.wethinkcode.robotworlds.RobotWorldJsonClient;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class LaunchRobotTests {
     private final static int DEFAULT_PORT = 5000;
     private final static String DEFAULT_IP = "localhost";
-    private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+    private final Play serverClient = new Play();
 
     @BeforeEach
     void connectToServer(){
