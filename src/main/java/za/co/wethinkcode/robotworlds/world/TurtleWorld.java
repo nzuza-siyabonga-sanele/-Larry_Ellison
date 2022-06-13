@@ -23,13 +23,13 @@ public class TurtleWorld extends AbstractWorld {
         int newX = this.position.getX();
         int newY = this.position.getY();
 
-        if (Direction.UP.equals(this.currentDirection)) {
+        if (Direction.NORTH.equals(this.currentDirection)) {
             newY = newY + nrSteps;
-        }else if(Direction.DOWN.equals(this.currentDirection)) {
+        }else if(Direction.SOUTH.equals(this.currentDirection)) {
             newY = newY - nrSteps;
-        }else if(Direction.LEFT.equals(this.currentDirection)) {
+        }else if(Direction.WEST.equals(this.currentDirection)) {
             newX = newX - nrSteps;
-        }else if(Direction.RIGHT.equals(this.currentDirection)) {
+        }else if(Direction.EAST.equals(this.currentDirection)) {
             newX = newX + nrSteps;
         }
 
@@ -53,31 +53,31 @@ public class TurtleWorld extends AbstractWorld {
     @Override
     public void updateDirection(boolean turnRight) {
         if (turnRight == true) {
-            if (Direction.UP.equals(this.currentDirection)) {
-                this.currentDirection = Direction.RIGHT;
+            if (Direction.NORTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.EAST;
                 tmt.right(90);
-            } else if (Direction.DOWN.equals(this.currentDirection)) {
-                this.currentDirection = Direction.LEFT;
+            } else if (Direction.SOUTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.WEST;
                 tmt.right(90);
-            } else if (Direction.LEFT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.UP;
+            } else if (Direction.WEST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.NORTH;
                 tmt.right(90);
-            } else if (Direction.RIGHT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.DOWN;
+            } else if (Direction.EAST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.SOUTH;
                 tmt.right(90);
             }
         } else if (turnRight == false) {
-            if (Direction.UP.equals(this.currentDirection)) {
-                this.currentDirection = Direction.LEFT;
+            if (Direction.NORTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.WEST;
                 tmt.left(90);
-            } else if (Direction.DOWN.equals(this.currentDirection)) {
-                this.currentDirection = Direction.RIGHT;
+            } else if (Direction.SOUTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.EAST;
                 tmt.left(90);
-            } else if (Direction.LEFT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.DOWN;
+            } else if (Direction.WEST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.SOUTH;
                 tmt.left(90);
-            } else if (Direction.RIGHT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.DOWN;
+            } else if (Direction.EAST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.SOUTH;
                 tmt.left(90);
             }
         }

@@ -5,31 +5,31 @@ import za.co.wethinkcode.robotworlds.maze.Maze;
 import java.util.List;
 
 public class AbstractWorld implements IWorld{
-    protected Position TOP_LEFT = new Position(-100,200);
-    protected Position BOTTOM_RIGHT = new Position(100,-200);
+    public static Position TOP_LEFT = new Position(-100,200);
+    public static Position BOTTOM_RIGHT = new Position(100,-200);
 
     public static final Position CENTRE = new Position(0,0);
-    protected Position position;
+
+    Position position;
+
     protected Direction currentDirection;
     protected final List<Obstacle> obstacles;
     protected final Maze maze;
-
     @Override
     public void SetPositions(int tlx, int tly, int blx, int bly){
         TOP_LEFT = new Position(tlx,tly);
         BOTTOM_RIGHT = new Position(blx,bly);
     }
+
     public AbstractWorld(Maze maze){
         this.maze = maze;
-        this.position = IWorld.CENTRE;
-        this.currentDirection = Direction.UP;
+        this.position = CENTRE;
+        this.currentDirection = Direction.NORTH;
         this.obstacles= this.maze.getObstacles();
     }
 
-
-    @Override
-    public void setPosition(Position centre) {
-        this.position = centre;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
     @Override
@@ -37,25 +37,28 @@ public class AbstractWorld implements IWorld{
         int newX = this.position.getX();
         int newY = this.position.getY();
 
-        if (Direction.UP.equals(this.currentDirection)) {
+        if (Direction.NORTH.equals(this.currentDirection)) {
             newY = newY + nrSteps;
-        }else if(Direction.DOWN.equals(this.currentDirection)) {
+        }else if(Direction.SOUTH.equals(this.currentDirection)) {
             newY = newY - nrSteps;
-        }else if(Direction.LEFT.equals(this.currentDirection)) {
+        }else if(Direction.WEST.equals(this.currentDirection)) {
             newX = newX - nrSteps;
-        }else if(Direction.RIGHT.equals(this.currentDirection)) {
+        }else if(Direction.EAST.equals(this.currentDirection)) {
             newX = newX + nrSteps;
         }
 
         Position newPosition = new Position(newX, newY);
         for (Obstacle obstacle :obstacles){
             if (obstacle.blocksPath(this.position,newPosition)){
+                System.out.println("failed");
                 return UpdateResponse.FAILED_OBSTRUCTED;
+
             }
         }
 
         if (newPosition.isIn(TOP_LEFT,BOTTOM_RIGHT)){
             this.position = newPosition;
+            System.out.println("succes");
             return UpdateResponse.SUCCESS;
         }
         return  UpdateResponse.FAILED_OUTSIDE_WORLD;
@@ -65,24 +68,24 @@ public class AbstractWorld implements IWorld{
     @Override
     public void updateDirection(boolean turnRight) {
         if (turnRight == true) {
-            if (Direction.UP.equals(this.currentDirection)) {
-                this.currentDirection = Direction.RIGHT;
-            } else if (Direction.DOWN.equals(this.currentDirection)) {
-                this.currentDirection = Direction.LEFT;
-            } else if (Direction.LEFT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.UP;
-            } else if (Direction.RIGHT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.DOWN;
+            if (Direction.NORTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.EAST;
+            } else if (Direction.SOUTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.WEST;
+            } else if (Direction.WEST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.NORTH;
+            } else if (Direction.EAST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.SOUTH;
             }
         } else if (turnRight == false) {
-            if (Direction.UP.equals(this.currentDirection)) {
-                this.currentDirection = Direction.LEFT;
-            } else if (Direction.DOWN.equals(this.currentDirection)) {
-                this.currentDirection = Direction.RIGHT;
-            } else if (Direction.LEFT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.DOWN;
-            } else if (Direction.RIGHT.equals(this.currentDirection)) {
-                this.currentDirection = Direction.DOWN;
+            if (Direction.NORTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.WEST;
+            } else if (Direction.SOUTH.equals(this.currentDirection)) {
+                this.currentDirection = Direction.EAST;
+            } else if (Direction.WEST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.SOUTH;
+            } else if (Direction.EAST.equals(this.currentDirection)) {
+                this.currentDirection = Direction.SOUTH;
             }
         }
     }
@@ -99,13 +102,13 @@ public class AbstractWorld implements IWorld{
         int newX = this.position.getX();
         int newY = this.position.getY();
 
-        if (Direction.UP.equals(this.currentDirection)) {
+        if (Direction.NORTH.equals(this.currentDirection)) {
             newY = newY - nrSteps;
-        }else if(Direction.DOWN.equals(this.currentDirection)) {
+        }else if(Direction.SOUTH.equals(this.currentDirection)) {
             newY = newY + nrSteps;
-        }else if(Direction.LEFT.equals(this.currentDirection)) {
+        }else if(Direction.WEST.equals(this.currentDirection)) {
             newX = newX + nrSteps;
-        }else if(Direction.RIGHT.equals(this.currentDirection)) {
+        }else if(Direction.EAST.equals(this.currentDirection)) {
             newX = newX - nrSteps;
         }
 
@@ -116,6 +119,11 @@ public class AbstractWorld implements IWorld{
     @Override
     public Direction getCurrentDirection() {
         return this.currentDirection;
+    }
+
+    @Override
+    public void setCurrentDirection(Direction direction) {
+        this.currentDirection = direction;
     }
 
 
@@ -134,7 +142,7 @@ public class AbstractWorld implements IWorld{
     @Override
     public void reset() {
         this.position = IWorld.CENTRE;
-        this.currentDirection = Direction.UP;
+        this.currentDirection = Direction.NORTH;
 
     }
 

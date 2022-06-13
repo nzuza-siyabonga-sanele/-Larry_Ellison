@@ -9,6 +9,8 @@ public interface IWorld {
 
     void setPosition(Position centre);
 
+    void setCurrentDirection(Direction direction);
+
     /**
      * Enum used to track direction
      */
