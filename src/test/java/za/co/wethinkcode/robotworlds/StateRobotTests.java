@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import za.co.wethinkcode.robots.server.RobotWorldClient;
+import za.co.wethinkcode.robotworlds.Client.Play;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +13,7 @@ public class StateRobotTests {
 
     private final static int DEFAULT_PORT = 5000;
     private final static String DEFAULT_IP = "localhost";
-    private final RobotWorldClient serverClient = new RobotWorldJsonClient();
+    private final Play serverClient = new Play();
 
     @BeforeEach
     void connectToServer(){
@@ -89,39 +90,5 @@ public class StateRobotTests {
         assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
 
-    @Test
-    void StateInvalidRobotRequest() {
-
-        // Given that I am connected to a running Robot Worlds server
-        assertTrue(serverClient.isConnected());
-
-        // launch two robot with same name to the Robot Worlds server
-        // launch Robot 1 and add to the list of players
-        String request1 = "{" +
-                "\"robot\": \"HAL\"," +
-                "\"command\": \"launch\"," +
-                "\"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-        // launch Robot 2
-        String request2 = "{" +
-                "\"robot\": \"BOB\"," +
-                "\"command\": \"state\"," +
-                "\"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-
-        // When I launch more than one robot request with the same name to join the sever
-        JsonNode response = serverClient.sendRequest(request1);
-        response = serverClient.sendRequest(request2);
-
-        // Then I should get an error response
-        assertNotNull(response.get("result"));
-        assertEquals("ERROR", response.get("result").asText());
-
-        // And the message "Unsupported command"
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("message"));
-        assertTrue(response.get("data").get("message").asText().contains("Robot does not exist"));
-
-        }
     }
 
