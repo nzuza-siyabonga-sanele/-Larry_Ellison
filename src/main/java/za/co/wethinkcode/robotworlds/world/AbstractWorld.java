@@ -28,6 +28,11 @@ public class AbstractWorld implements IWorld{
 
 
     @Override
+    public void setPosition(Position centre) {
+        this.position = centre;
+    }
+
+    @Override
     public UpdateResponse updatePosition(int nrSteps) {
         int newX = this.position.getX();
         int newY = this.position.getY();
@@ -170,8 +175,8 @@ public class AbstractWorld implements IWorld{
         List<Obstacle> newObstacle= maze;
         System.out.println("There are some obstacles :");
         for (int i = 0; i < newObstacle.size(); i++) {
-           int x= newObstacle.get(i).getBottomLeftX();
-           int y= newObstacle.get(i).getBottomLeftY();
+            int x= newObstacle.get(i).getBottomLeftX();
+            int y= newObstacle.get(i).getBottomLeftY();
 
             System.out.println("- At position "+ x+", "+y+" (to "+ Math.addExact(x,4)+","+Math.addExact(y,4)+")");
         }

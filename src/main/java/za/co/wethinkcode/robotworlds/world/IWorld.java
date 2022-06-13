@@ -6,6 +6,9 @@ import java.util.List;
  * Your Text and Turtle worlds must implement this interface.
  */
 public interface IWorld {
+
+    void setPosition(Position centre);
+
     /**
      * Enum used to track direction
      */

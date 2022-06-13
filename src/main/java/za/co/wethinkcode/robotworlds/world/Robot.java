@@ -1,58 +1,63 @@
 package za.co.wethinkcode.robotworlds.world;
 
-import org.json.JSONObject;
 import za.co.wethinkcode.robotworlds.Commands.Command;
 import za.co.wethinkcode.robotworlds.Json;
+import za.co.wethinkcode.robotworlds.Server.Server;
 
 import java.util.ArrayList;
 
 
-public class Robot extends JSONObject {
+public class Robot {
 
     public static final Position CENTRE = new Position(0,0);
 
+
+    public String getHasLaunched() {
+        return Server.hasLaunched;
+    }
+    public void setHasLaunched(String hasLaunched) {
+        Server.hasLaunched = hasLaunched;
+    }
     private String status;
     private String name;
     private ArrayList<String> History;
-    public IWorld world;
+    IWorld world;
 
-
-    public int shots= 5;
-
-    private int shield = 3;
-
-    public String getPrint = "";
-
-
-    public Robot(String name,IWorld world) {
-        this.name = name;
-        this.status = "Ready";
-        this.History = new ArrayList<>();
-        this.world=world;
+    public int getShots() {
+        return shots;
     }
 
+    public int getShield() {
+        return shield;
+    }
 
-    public Robot(String name) {
+    public int shots;
+    private int shield;
+
+    public Robot(String name, IWorld world) {
+        this.world = world;
         this.name = name;
         this.status = "Ready";
         this.History = new ArrayList<>();
     }
 
+//    public Robot(String name) {
+//        this.name = name;
+//        this.status = "Ready";
+//        this.History = new ArrayList<>();
+//    }
 
     public int shot(){
         return this.shots=this.shots-1;
     }
 
-
-    public  void reload(){
+    public void reload(){
         this.shots=5;
     }
-
 
     public String getStatus() {
         return this.status;
     }
-
 
     public ArrayList<String> getHistory() {
         return this.History;
@@ -63,19 +68,15 @@ public class Robot extends JSONObject {
         this.History.add(command);
     }
 
-
     public Json handleCommand(Command command) {
-
         return command.execute(this);
     }
 
-
     @Override
     public String toString() {
-       return "[" + this.getWorld().getPosition().getX() + "," + this.getWorld().getPosition().getY() + "] "
-               + this.name + "> " + this.status;
+        return "[" + this.getWorld().getPosition().getX() + "," + this.getWorld().getPosition().getY() + "] "
+                + this.name + "> " + this.status;
     }
-
 
     public void setStatus(String status) {
         this.status = status;
@@ -89,12 +90,12 @@ public class Robot extends JSONObject {
         return this.world;
     }
 
-    public Position getPosition() {
-       return this.getWorld().getPosition();
+//    public Position getPosition() {
+//       return this.getWorld().getPosition();
+//    }
+
+    public void setShieldAndShots(String shield, String shot) {
+        this.shield = Integer.parseInt(shield);
+        this.shots = Integer.parseInt(shot);
     }
-
-    public void repair() {
-
-    }
-
 }
