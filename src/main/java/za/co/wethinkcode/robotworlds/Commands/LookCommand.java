@@ -1,19 +1,21 @@
 package za.co.wethinkcode.robotworlds.Commands;
 
-import za.co.wethinkcode.robotworlds.world.Position;
+import za.co.wethinkcode.robotworlds.Json;
 import za.co.wethinkcode.robotworlds.world.Robot;
+
+import java.util.List;
 
 public class LookCommand extends Command {
 
 
-
-    public boolean execute(Robot target) {
-
-        Position robotPosition = target.getWorld().getPosition();
-        return true;
+    public LookCommand(String command, List<String> argument) {
+        super("look", command, argument);
     }
-    public LookCommand() {
 
-        super("look");
+    public Json execute(Robot target) {
+
+
+        return null;
     }
+
 }
