@@ -2,8 +2,7 @@ package za.co.wethinkcode.robotworlds.world;
 
 import org.json.JSONObject;
 import za.co.wethinkcode.robotworlds.Commands.Command;
-import za.co.wethinkcode.robotworlds.Server.Server;
-import za.co.wethinkcode.robotworlds.world.*;
+import za.co.wethinkcode.robotworlds.Json;
 
 import java.util.ArrayList;
 
@@ -65,7 +64,7 @@ public class Robot extends JSONObject {
     }
 
 
-    public boolean handleCommand(Command command) {
+    public Json handleCommand(Command command) {
 
         return command.execute(this);
     }
