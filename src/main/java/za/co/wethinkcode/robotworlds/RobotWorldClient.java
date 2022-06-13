@@ -1,4 +1,4 @@
-package za.co.wethinkcode.robots.server;
+package za.co.wethinkcode.robotworlds;
 
 import com.fasterxml.jackson.databind.JsonNode;
 

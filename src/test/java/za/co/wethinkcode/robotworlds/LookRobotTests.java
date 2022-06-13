@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import za.co.wethinkcode.robots.server.RobotWorldClient;
 import za.co.wethinkcode.robotworlds.Client.Play;
 
 import java.lang.reflect.Array;
@@ -54,31 +53,32 @@ public class LookRobotTests {
                 "}";
 
 
-        JsonNode response = serverClient.sendRequest(request);
-        response = serverClient.sendRequest(request2);
+        JsonNode response1 = serverClient.sendRequest(request);
+        JsonNode response2 = serverClient.sendRequest(request2);
 
         // Then I should get a valid response from the server
-        assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
+        assertNotNull(response2.get("result"));
+        assertEquals("OK", response2.get("result").asText());
 
         // And the position should be (x:0, y:0)
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("position"));
-        assertEquals(0, response.get("data").get("position").get(0).asInt());
-        assertEquals(0, response.get("data").get("position").get(1).asInt());
+        assertNotNull(response2.get("data"));
+
+        assertNotNull(response2.get("data").get("position"));
+        assertEquals(0, response2.get("data").get("position").get(0).asInt());
+        assertEquals(0, response2.get("data").get("position").get(1).asInt());
 
 
         List<String> directionList = Arrays.asList("NORTH", "EAST", "SOUTH", "WEST");
 
         List<String> objectList = Arrays.asList("EDGE", "Pit", "Robot", "Mines");
 
-        assertTrue(directionList.contains(response.get("data").get("objects").get(0).get("direction").asText()));
-        assertTrue(objectList.contains(response.get("data").get("objects").get(0).get("type").asText()));
+        assertTrue(directionList.contains(response2.get("data").get("objects").get(0).get("direction").asText()));
+        assertTrue(objectList.contains(response2.get("data").get("objects").get(0).get("type").asText()));
 
-        assertEquals("EDGE", response.get("data").get("objects").get(0).get("type").asText());
-        assertEquals(1, response.get("data").get("objects").get(0).get("distance").asInt());
+        assertEquals("EDGE", response2.get("data").get("objects").get(0).get("type").asText());
+        assertNotNull(response2.get("data").get("objects").get(0).get("distance").asInt());
         // And I should also get the state of the robot
-        assertNotNull(response.get("state"));
+        assertNotNull(response2.get("state"));
     }
     @Test
     void invalidLookShouldFail(){

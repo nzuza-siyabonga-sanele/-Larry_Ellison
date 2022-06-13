@@ -1,8 +1,9 @@
 //package za.co.wethinkcode.robotworlds.Commands;
 //
-//import za.co.wethinkcode.robotworlds.world.Position;
+//import com.fasterxml.jackson.databind.JsonNode;
 //import za.co.wethinkcode.robotworlds.world.Robot;
 //import za.co.wethinkcode.robotworlds.world.IWorld;
+//import za.co.wethinkcode.robotworlds.world.Position;
 //
 //public class FireCommand extends Command {
 //
@@ -15,7 +16,7 @@
 ////    }
 //
 //    @Override
-//    public boolean execute(Robot target) {
+//    public JsonNode execute(Robot target) {
 //
 //        Position robotPosition = target.getWorld().getPosition();
 //
@@ -41,6 +42,6 @@
 //            target.setStatus("Shots left "+target.shots+" (no active attack available) please reload.");
 //        }
 //
-//        return true;
+//        return null;
 //    }
 //}

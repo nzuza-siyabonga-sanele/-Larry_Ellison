@@ -1,5 +1,6 @@
 //package za.co.wethinkcode.robotworlds.Commands;
 //
+//import com.fasterxml.jackson.databind.JsonNode;
 //import za.co.wethinkcode.robotworlds.world.Robot;
 //
 //public class ShutdownCommand extends Command {
@@ -8,8 +9,8 @@
 //    }
 //
 //    @Override
-//    public boolean execute(Robot target) {
+//    public JsonNode execute(Robot target) {
 //        target.setStatus("Shutting down...");
-//        return false;
+//        return null;
 //    }
 //}

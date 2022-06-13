@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import za.co.wethinkcode.robots.server.RobotWorldClient;
 import za.co.wethinkcode.robotworlds.Client.Play;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,19 +43,19 @@ public class StateRobotTests {
                 "  \"arguments\": []" +
                 "}";
 
-        JsonNode response = serverClient.sendRequest(request1);
-        response = serverClient.sendRequest(request2);
+        JsonNode response1 = serverClient.sendRequest(request1);
+        JsonNode response2 = serverClient.sendRequest(request2);
 
         // Then I should get a valid response from the server
-        assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
+        assertNotNull(response2.get("result"));
+        assertEquals("OK", response2.get("result").asText());
 
         // And the position should be (x:0, y:0)
-        assertEquals(0, response.get("state").get("shields").asInt());
-        assertEquals(0, response.get("state").get("shots").asInt());
+        assertEquals(0, response2.get("state").get("shields").asInt());
+        assertEquals(0, response2.get("state").get("shots").asInt());
 
         // And I should also get the state of the robot
-        assertNotNull(response.get("state"));
+        assertNotNull(response2.get("state"));
     }
 
     @Test
@@ -76,19 +75,19 @@ public class StateRobotTests {
                 "  \"arguments\": []" +
                 "}";
 
-        JsonNode response = serverClient.sendRequest(request1);
-        response = serverClient.sendRequest(request2);
+        JsonNode response1 = serverClient.sendRequest(request1);
+        JsonNode response2 = serverClient.sendRequest(request2);
 
         //I should get an invalid response from the server.
-        assertNotNull(response.get("result"));
-        assertEquals("ERROR", response.get("result").asText());
+        assertNotNull(response2.get("result"));
+        assertEquals("ERROR", response2.get("result").asText());
 
 
-        // And the message "Unsupported command"
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("message"));
-        assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
+        // And the message "Unsupported command"S
+        assertNotNull(response2.get("data"));
+        assertNotNull(response2.get("data").get("message"));
+        assertTrue(response2.get("data").get("message").asText().contains("Unsupported command"));
     }
 
-    }
+}
 

@@ -2,7 +2,7 @@ package za.co.wethinkcode.robotworlds.world;
 
 import za.co.wethinkcode.robotworlds.Commands.Command;
 import za.co.wethinkcode.robotworlds.Json;
-import za.co.wethinkcode.robotworlds.Server.Server;
+import za.co.wethinkcode.robotworlds.Server;
 
 import java.util.ArrayList;
 
@@ -74,8 +74,8 @@ public class Robot {
 
     @Override
     public String toString() {
-        return "[" + this.getWorld().getPosition().getX() + "," + this.getWorld().getPosition().getY() + "] "
-                + this.name + "> " + this.status;
+       return "[" + this.getWorld().getPosition().getX() + "," + this.getWorld().getPosition().getY() + "] "
+               + this.name + "> " + this.status;
     }
 
     public void setStatus(String status) {

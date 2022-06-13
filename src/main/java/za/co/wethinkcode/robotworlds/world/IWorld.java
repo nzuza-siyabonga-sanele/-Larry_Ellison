@@ -6,11 +6,6 @@ import java.util.List;
  * Your Text and Turtle worlds must implement this interface.
  */
 public interface IWorld {
-
-    void setPosition(Position centre);
-
-    void setCurrentDirection(Direction direction);
-
     /**
      * Enum used to track direction
      */
@@ -47,6 +42,7 @@ public interface IWorld {
      */
     Position getPosition();
 
+    void setPosition(Position position);
     Position resetPosition(int nrSteps);
 
     /**
@@ -54,6 +50,10 @@ public interface IWorld {
      * @return Direction.UP, RIGHT, DOWN, or LEFT
      */
     Direction getCurrentDirection();
+
+
+    void setCurrentDirection(Direction direction);
+
 
     /**
      * Checks if the new position will be allowed, i.e. falls within the constraints of the world, and does not overlap an obstacle.

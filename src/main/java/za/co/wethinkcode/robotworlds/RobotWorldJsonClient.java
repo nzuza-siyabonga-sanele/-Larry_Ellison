@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 
-public class RobotWorldJsonClient implements za.co.wethinkcode.robots.server.RobotWorldClient {
+public class RobotWorldJsonClient implements RobotWorldClient{
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     private Socket socket;

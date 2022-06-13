@@ -1,6 +1,5 @@
 package za.co.wethinkcode.robotworlds.Commands;
 
-
 import za.co.wethinkcode.robotworlds.Json;
 import za.co.wethinkcode.robotworlds.world.Robot;
 
@@ -44,8 +43,8 @@ public abstract class Command {
 //                return new ShutdownCommand();
 //            case "help":
 //                return new HelpCommand();
-//            case "forward":
-//                return new ForwardCommand(command, argument);
+            case "forward":
+                return new ForwardCommand(command, argument);
 //            case "back":
 //                return new BackCommand(command, argument);
 //            case "left":
@@ -56,8 +55,8 @@ public abstract class Command {
 //                return new SprintCommand(command, argument);
 //            case "fire":
 //                return new FireCommand();
-//            case "launch":
-//                return new launchCommand(command, argument);
+            case "launch":
+                return new launchCommand(command, argument);
             case "look":
                 return new LookCommand(command, argument);
             case "state":

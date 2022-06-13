@@ -1,4 +1,5 @@
 //package za.co.wethinkcode.robotworlds;
+//import org.junit.jupiter.api.Assertions;
 //import org.junit.jupiter.api.Test;
 //import static org.junit.Assert.*;
 //
@@ -7,7 +8,6 @@
 //import za.co.wethinkcode.robotworlds.maze.EmptyMaze;
 //import za.co.wethinkcode.robotworlds.world.IWorld;
 //import za.co.wethinkcode.robotworlds.world.Position;
-//import za.co.wethinkcode.robotworlds.world.Robot;
 //import za.co.wethinkcode.robotworlds.world.TextWorld;
 //
 //class RobotTest {
@@ -48,7 +48,7 @@
 //    @Test
 //    void forwardforward() {
 //        Robot robot = new Robot("CrashTestDummy",maze);
-//        assertTrue(robot.handleCommand(new ForwardCommand("10")));
+//        Assertions.assertTrue(robot.handleCommand(new ForwardCommand("10")));
 //        assertTrue(robot.handleCommand(new ForwardCommand("5")));
 //        assertEquals("Moved forward by 5 steps.", robot.getStatus());
 //    }

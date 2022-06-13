@@ -4,9 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import za.co.wethinkcode.robots.server.RobotWorldClient;
 import za.co.wethinkcode.robotworlds.Client.Play;
-import za.co.wethinkcode.robotworlds.RobotWorldJsonClient;
 
 import java.util.ArrayList;
 
@@ -31,39 +29,13 @@ class LaunchRobotTests {
     void disconnectFromServer(){
         serverClient.disconnect();
     }
-    @Test
-    void validLaunchShouldSucceed(){
-        // Given that I am connected to a running Robot Worlds server
-        // And the world is of size 1x1 (The world is configured or hardcoded to this size)
-        assertTrue(serverClient.isConnected());
 
-        // When I send a valid launch request to the server
-        String request = "{" +
-                "  \"robot\": \"HAL\"," +
-                "  \"command\": \"launch\"," +
-                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
-                "}";
-        JsonNode response = serverClient.sendRequest(request);
-
-        // Then I should get a valid response from the server
-        assertNotNull(response.get("result"));
-        assertEquals("OK", response.get("result").asText());
-
-        // And the position should be (x:0, y:0)
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("position"));
-        assertEquals(0, response.get("data").get("position").get(0).asInt());
-        assertEquals(0, response.get("data").get("position").get(1).asInt());
-
-        // And I should also get the state of the robot
-        assertNotNull(response.get("state"));
-    }
     @Test
     void invalidLaunchShouldFail(){
         // Given that I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
 
-        // When I send an invalid launch request with the command "luanch" instead of "launch"
+        // When I send a invalid launch request with the command "luanch" instead of "launch"
         String request = "{" +
                 "\"robot\": \"HAL\"," +
                 "\"command\": \"luanch\"," +
@@ -76,13 +48,14 @@ class LaunchRobotTests {
         assertEquals("ERROR", response.get("result").asText());
 
         // And the message "Unsupported command"
+        System.out.println(response);
         assertNotNull(response.get("data"));
         assertNotNull(response.get("data").get("message"));
         assertTrue(response.get("data").get("message").asText().contains("Unsupported command"));
     }
 
     @Test
-    void validLaunchNoFreeLocation(){
+    void validlaunchNoFreeLocation(){
 
         // Given that I am connected to a running Robot Worlds server
         assertTrue(serverClient.isConnected());
@@ -120,20 +93,22 @@ class LaunchRobotTests {
                 "}";
 
         // When I launch many robot request to join the sever
-        JsonNode response = serverClient.sendRequest(request5);
-        response = serverClient.sendRequest(request1);
-        response = serverClient.sendRequest(request2);
-        response = serverClient.sendRequest(request3);
-        response = serverClient.sendRequest(request4);
+        JsonNode response = serverClient.sendRequest(request1);
+        JsonNode response1 = serverClient.sendRequest(request2);
+        JsonNode response2 = serverClient.sendRequest(request3);
+        JsonNode response3 = serverClient.sendRequest(request4);
+        JsonNode response4 = serverClient.sendRequest(request5);
+
+        System.out.println(response4);
 
         // Then I should get an error response
-        assertNotNull(response.get("result"));
-        assertEquals("ERROR", response.get("result").asText());
+        assertNotNull(response4.get("result"));
+        assertEquals("ERROR", response4.get("result").asText());
 
         // And the message "Unsupported command"
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("message"));
-        assertTrue(response.get("data").get("message").asText().contains("No more space in this world"));
+        assertNotNull(response4.get("data"));
+        assertNotNull(response4.get("data").get("message"));
+        assertTrue(response4.get("data").get("message").asText().contains("No more space in this world"));
 
     }
 
@@ -159,17 +134,44 @@ class LaunchRobotTests {
 
         // When I launch more then one robot request with the same name to join the sever
         JsonNode response = serverClient.sendRequest(request1);
-        response = serverClient.sendRequest(request2);
+        JsonNode response2 = serverClient.sendRequest(request2);
 
         // Then I should get an error response
-        assertNotNull(response.get("result"));
-        assertEquals("ERROR", response.get("result").asText());
+        assertNotNull(response2.get("result"));
+        assertEquals("ERROR", response2.get("result").asText());
 
         // And the message "Unsupported command"
-        assertNotNull(response.get("data"));
-        assertNotNull(response.get("data").get("message"));
-        assertTrue(response.get("data").get("message").asText().contains("Too many of you in this world"));
+        assertNotNull(response2.get("data"));
+        assertNotNull(response2.get("data").get("message"));
+        assertTrue(response2.get("data").get("message").asText().contains("Too many of you in this world"));
 
+    }
+    @Test
+    void validLaunchShouldSucceed(){
+        // Given that I am connected to a running Robot Worlds server
+        // And the world is of size 1x1 (The world is configured or hardcoded to this size)
+        assertTrue(serverClient.isConnected());
+
+        // When I send a valid launch request to the server
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+        JsonNode response = serverClient.sendRequest(request);
+
+        // Then I should get a valid response from the server
+        assertNotNull(response.get("result"));
+        assertEquals("OK", response.get("result").asText());
+
+        // And the position should be (x:0, y:0)
+        assertNotNull(response.get("state"));
+        assertNotNull(response.get("state").get("position"));
+        assertEquals(0, response.get("state").get("position").get(0).asInt());
+        assertEquals(0, response.get("state").get("position").get(1).asInt());
+
+        // And I should also get the state of the robot
+        assertNotNull(response.get("state"));
     }
 
 }

@@ -1,5 +1,6 @@
 //package za.co.wethinkcode.robotworlds.Commands;
 //
+//import com.fasterxml.jackson.databind.JsonNode;
 //import za.co.wethinkcode.robotworlds.world.Robot;
 //
 //public class RepairCommand extends Command {
@@ -10,8 +11,8 @@
 //
 //
 //    @Override
-//    public boolean execute(Robot target) {
+//    public JsonNode execute(Robot target) {
 //        target.repair();
-//        return true;
+//        return null;
 //    }
 //}

@@ -1,5 +1,6 @@
 //package za.co.wethinkcode.robotworlds.Commands;
 //
+//import com.fasterxml.jackson.databind.JsonNode;
 //import za.co.wethinkcode.robotworlds.world.Robot;
 //
 //public class HelpCommand extends Command {
@@ -9,7 +10,7 @@
 //    }
 //
 //    @Override
-//    public boolean execute(Robot target) {
+//    public JsonNode execute(Robot target) {
 //        target.setStatus("I can understand these commands:\n" +
 //                "OFF  - Shut down robot\n" +
 //                "HELP - provide information about commands\n" +
@@ -18,6 +19,6 @@
 //                "LEFT - turns left, e.g. 'TURNED LEFT'\n" +
 //                "FIRE - Shoot the opponent, e.g. 'Target shot\n" +
 //                "RIGHT - turns right, e.g. 'TURNED RIGHT'");
-//        return true;
+//        return null;
 //    }
 //}

@@ -1,9 +1,9 @@
 package za.co.wethinkcode.robotworlds.world;
 
+import za.co.wethinkcode.robotworlds.Turtle.Turtle;
 import za.co.wethinkcode.robotworlds.maze.Maze;
 
 import java.util.List;
-import za.co.wethinkcode.robotworlds.Turtle.Turtle;
 
 public class TurtleWorld extends AbstractWorld {
     Turtle tmt = new Turtle();;
@@ -17,6 +17,7 @@ public class TurtleWorld extends AbstractWorld {
         drawObstacles(maze);
         tmt.dot("orange");
     }
+
 
     @Override
     public UpdateResponse updatePosition(int nrSteps) {
