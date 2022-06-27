@@ -1,31 +1,27 @@
 package za.co.wethinkcode.robotworlds.Server;
 
-import java.io.*;
-import java.net.Socket;
-import java.util.HashMap;
-import java.util.Scanner;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import org.json.JSONObject;
 import za.co.wethinkcode.robotworlds.Commands.Command;
 import za.co.wethinkcode.robotworlds.Commands.createCommand;
 import za.co.wethinkcode.robotworlds.Json;
-import za.co.wethinkcode.robotworlds.maze.EmptyMaze;
+import za.co.wethinkcode.robotworlds.MultiServer;
 import za.co.wethinkcode.robotworlds.world.AbstractWorld;
 import za.co.wethinkcode.robotworlds.world.IWorld;
 import za.co.wethinkcode.robotworlds.world.Robot;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.Scanner;
 
 public class Server implements Runnable {
 
-    // added new fields and changed them to public and same to private
-    public static final int PORT = 5000;
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-    public static HashMap<String, Json> players = new HashMap<String, Json>();
     private BufferedReader din;
     private PrintStream dout ;
 
@@ -47,18 +43,15 @@ public class Server implements Runnable {
         }
         return input;
     }
-    void setposition (Robot robot ) throws IOException {
-        int bry;
-        int brx;
-        int tly;
-        int tlx;
-        tlx = Integer.parseInt(getInput("Input top left X"));
-        tly = Integer.parseInt(getInput("Input top left Y"));
-        brx = Integer.parseInt(getInput("Input bottom right X"));
-        bry = Integer.parseInt(getInput("Input bottom right Y"));
+    static void setposition(String[] arguments){
+        //-p 5000 -s 100 -o 10,5
+        int bry = -1 * Integer.parseInt(arguments[1])/2;
+        int brx = Integer.parseInt(arguments[0])/2;
+        int tly = Integer.parseInt(arguments[1])/2;
+        int tlx = -1 * Integer.parseInt(arguments[0])/2;
 
-        IWorld world = robot.getWorld();
         world.SetPositions(tlx, tly, brx, bry);
+
     }
 
     public Server(Socket socket){
@@ -78,66 +71,32 @@ public class Server implements Runnable {
         System.out.println("Waiting for client...");
     }
 
-    public Server(){}
-
     public void run() {
 
         JsonNode cont;
         String instruction;
 
-            try {
-//                //            System.out.println("qwertyuiop");
-//                //            System.out.println(din.readUTF());
-//
-//                in = din.readLine();
-//
-//                JSONObject out = new JSONObject(in);
-//                System.out.println(out);
-//                String name = String.valueOf(out.get("robot"));
-//
-//                world = new AbstractWorld(new EmptyMaze());
-//                robot = new Robot(name, world);
-//
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
+        try {
 
+            // changed the while true loop to while request is not null
+            while ((in = din.readLine()) != null) {
 
-                // changed the while true loop to while request is not null
-                while ((in = din.readLine()) != null) {
+                JSONObject out = new JSONObject(in);
+                robot = new Robot(out.getString("robot"), world, MultiServer.configFile);
 
-                    JSONObject out = new JSONObject(in);
-                    //                instruction= (out.getString("command"));
+                // called the reciverRequest passing the request from the client
+                cont = reciverRequest(in);
 
-                    robot = new Robot(out.getString("robot"), world);
-
-                    // called the reciverRequest passing the request from the client
-                    cont = reciverRequest(in);
-
-                    ////                Command command = Command.create(instruction);
-                    ////                cont=robot.handleCommand(command);
-
-                    //                if (instruction.split(" ")[0].equalsIgnoreCase( "replay")
-                    //                        ||instruction.split(" ")[0].equalsIgnoreCase( "mazerun")){
-                    //                }else {
-                    //                    robot.appendToHistory(instruction);
-                    //                }
-                    //                if (command.getName()== "sprint"){
-                    //                    System.out.println(robot.getPrint.trim());
-                    //                    robot.getPrint = "";
-                    //                }
-
-                    dout.println(cont);
-                    dout.flush();
-                }
-                robot.getWorld().setPosition(AbstractWorld.CENTRE);
-                players.clear();
-
-
-            } catch (IOException ex) {
-                System.out.println("Shutting down single client server");
+                dout.println(cont);
+                dout.flush();
             }
+            robot.getWorld().setPosition(AbstractWorld.CENTRE);
+            AbstractWorld.players.clear();
+
+        } catch (IOException ex) {
+            System.out.println("Shutting down single client server");
         }
+    }
 
     // Added this method to the server for all the request from the client
     public JsonNode reciverRequest(String request){
