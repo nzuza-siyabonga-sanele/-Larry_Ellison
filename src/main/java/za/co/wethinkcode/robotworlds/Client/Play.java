@@ -3,7 +3,6 @@ package za.co.wethinkcode.robotworlds.Client;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import za.co.wethinkcode.robotworlds.Json;
-import za.co.wethinkcode.robotworlds.MultiServer;
 import za.co.wethinkcode.robotworlds.world.*;
 import za.co.wethinkcode.robotworlds.maze.EmptyMaze;
 import za.co.wethinkcode.robotworlds.maze.RandomMaze;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import static za.co.wethinkcode.robotworlds.Server.Server.OBJECT_MAPPER;
+
 
 public class Play {
 
@@ -109,50 +109,50 @@ public class Play {
         return input;
     }
 
-    public static AbstractWorld worldSelector(String []args){
-        AbstractWorld world = null;
-
-        if (args.length == 0 || args[0].equalsIgnoreCase("text"))
-        {
-            if (args.length == 0 || args.length==1 && args[0].equalsIgnoreCase("text") || args[1].equalsIgnoreCase("emptymaze") )
-            {
-                System.out.println("Loaded EmptyMaze.");
-                 world = new TextWorld(new EmptyMaze());
-
-            }
-            else if(args[1].equalsIgnoreCase("simplemaze"))
-            {
-                System.out.println("Loaded SimpleMaze.");
-                world = new TextWorld(new SimpleMaze());
-
-            }
-            else if(args[1].equalsIgnoreCase("randommaze"))
-            {
-                System.out.println("Loaded RandomMaze.");
-                 world = new TextWorld(new RandomMaze());
-            }}else if (args[0].equalsIgnoreCase("turtle"))
-        {
-            if ( args.length==1 && args[0].equalsIgnoreCase("turtle") ||args[1].equalsIgnoreCase("randommaze"))
-            {
-                System.out.println("Loaded RandomMaze.");
-                 world = new TurtleWorld(new RandomMaze());
-
-            }
-            else if(args[1].equalsIgnoreCase("simplemaze"))
-            {
-                System.out.println("Loaded SimpleMaze.");
-                 world = new TurtleWorld(new SimpleMaze());
-
-            }
-            else if(args[1].equalsIgnoreCase("emptymaze"))
-            {
-                System.out.println("Loaded EmptyMaze.");
-                 world = new TurtleWorld(new EmptyMaze());
-
-            }
-        }
-        return world;
-    }
+//    public static AbstractWorld worldSelector(String []args){
+//        AbstractWorld world = null;
+//
+//        if (args.length == 0 || args[0].equalsIgnoreCase("text"))
+//        {
+//            if (args.length == 0 || args.length==1 && args[0].equalsIgnoreCase("text") || args[1].equalsIgnoreCase("emptymaze") )
+//            {
+//                System.out.println("Loaded EmptyMaze.");
+//                 world = new TextWorld(new EmptyMaze(args));
+//
+//            }
+//            else if(args[1].equalsIgnoreCase("simplemaze"))
+//            {
+//                System.out.println("Loaded SimpleMaze.");
+//                world = new TextWorld(new SimpleMaze());
+//
+//            }
+//            else if(args[1].equalsIgnoreCase("randommaze"))
+//            {
+//                System.out.println("Loaded RandomMaze.");
+//                 world = new TextWorld(new RandomMaze());
+//            }}else if (args[0].equalsIgnoreCase("turtle"))
+//        {
+//            if ( args.length==1 && args[0].equalsIgnoreCase("turtle") ||args[1].equalsIgnoreCase("randommaze"))
+//            {
+//                System.out.println("Loaded RandomMaze.");
+//                 world = new TurtleWorld(new RandomMaze());
+//
+//            }
+//            else if(args[1].equalsIgnoreCase("simplemaze"))
+//            {
+//                System.out.println("Loaded SimpleMaze.");
+//                 world = new TurtleWorld(new SimpleMaze());
+//
+//            }
+//            else if(args[1].equalsIgnoreCase("emptymaze"))
+//            {
+//                System.out.println("Loaded EmptyMaze.");
+//                 world = new TurtleWorld(new EmptyMaze(args));
+//
+//            }
+//        }
+//        return world;
+//    }
 
     // added new method that helps create new socket, buffered reader and print stream.
     public boolean connect(String defaultIp, int defaultPort) {
