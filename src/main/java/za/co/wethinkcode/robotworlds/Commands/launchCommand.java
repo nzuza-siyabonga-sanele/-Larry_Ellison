@@ -2,6 +2,7 @@ package za.co.wethinkcode.robotworlds.Commands;
 
 import za.co.wethinkcode.robotworlds.Json;
 import za.co.wethinkcode.robotworlds.Server.Server;
+import za.co.wethinkcode.robotworlds.world.AbstractWorld;
 import za.co.wethinkcode.robotworlds.world.Robot;
 
 import java.util.List;
@@ -24,9 +25,9 @@ public class launchCommand extends Command {
 
         Json data = new Json();
 
-        if(!Server.players.containsKey(target.getName())){
+        if(!AbstractWorld.players.containsKey(target.getName())){
 
-            if (Server.players.size() < 4){
+            if (AbstractWorld.players.size() < 4){
 
                 Json state = new Json();
 
@@ -41,7 +42,7 @@ public class launchCommand extends Command {
                 jData.setMap("data", "{}");
                 jData.setMap("state", state.getJsonData());
 
-                Server.players.put(target.getName(),jData);
+                AbstractWorld.players.put(target.getName(),jData);
                 return jData;
 
             }else{

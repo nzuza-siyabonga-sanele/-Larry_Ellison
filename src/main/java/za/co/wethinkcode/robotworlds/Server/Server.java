@@ -43,7 +43,7 @@ public class Server implements Runnable {
         }
         return input;
     }
-    static void setposition(String[] arguments){
+    public static void setposition(String[] arguments){
         //-p 5000 -s 100 -o 10,5
         int bry = -1 * Integer.parseInt(arguments[1])/2;
         int brx = Integer.parseInt(arguments[0])/2;
