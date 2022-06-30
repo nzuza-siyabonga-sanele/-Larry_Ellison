@@ -89,6 +89,8 @@ public class LookRobotTests {
         // And I should also get the state of the robot
         assertNotNull(response2.get("state"));
     }
+
+
     @Test
     void invalidLookShouldFail(){
         // Given that I am connected to a running Robot Worlds server
@@ -117,5 +119,48 @@ public class LookRobotTests {
         assertNotNull(response2.get("data"));
         assertNotNull(response2.get("data").get("message"));
         assertTrue(response2.get("data").get("message").asText().equalsIgnoreCase("Unsupported command"));
+    }
+
+    @Test
+    void seeAnObstacle() {
+        // Given that I am connected to a running Robot Worlds server
+        // And the world is of size 2x2 (The world is configured or hardcoded to this size)
+        assertTrue(serverClient.isConnected());
+
+        // When I send a valid launch request to the server
+        String request = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"launch\"," +
+                "  \"arguments\": [\"shooter\",\"5\",\"5\"]" +
+                "}";
+
+        String request2 = "{" +
+                "  \"robot\": \"HAL\"," +
+                "  \"command\": \"look\"," +
+                "  \"arguments\": []" +
+                "}";
+
+
+        JsonNode response1 = serverClient.sendRequest(request);
+        JsonNode response2 = serverClient.sendRequest(request2);
+
+        // System.out.println(response2);
+        // Then I should get a valid response from the server
+        assertNotNull(response2.get("result"));
+        assertEquals("OK", response2.get("result").asText());
+
+        // And the position should be (x:0, y:0)
+        assertNotNull(response2.get("data"));
+
+
+        System.out.println(response2.get("data").get("objects"));
+        for (int i = 0; i < response2.get("data").get("objects").size(); i++) {
+            String obstacle = (response2.get("data").get("objects").get(i).get("type").asText());
+            if (obstacle.equals("OBSTACLE")) {
+                assertEquals("OBSTACLE", obstacle);
+                assertEquals(1,response2.get("data").get("objects").get(i).get("distance").asInt());
+            }
+
+        }
     }
 }
