@@ -11,7 +11,7 @@ public class ErrorHandling extends Command {
     public ErrorHandling(String name,String command, List<String> argument) {
         super(name,command,argument);
     }
-
+    //starting the game json collecting data
     @Override
     public Json execute(Robot target) {
 
