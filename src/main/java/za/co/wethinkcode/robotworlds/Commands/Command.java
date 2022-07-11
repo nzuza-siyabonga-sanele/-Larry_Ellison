@@ -16,11 +16,6 @@ public abstract class Command {
 
     public abstract Json execute(Robot target);
 
-//    public Command(String name){
-//        this.name = name.trim().toLowerCase();
-//        this.argument = "";
-//    }
-
     public Command(String robot, String command, List<String> arguments) {
         this.name = robot;
         this.command = command;
@@ -69,4 +64,5 @@ public abstract class Command {
         }
     }
 }
+
 
