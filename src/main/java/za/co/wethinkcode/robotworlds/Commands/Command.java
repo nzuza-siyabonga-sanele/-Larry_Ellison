@@ -15,7 +15,7 @@ public abstract class Command {
     }
 
     public abstract Json execute(Robot target);
-
+    //Command constructor
     public Command(String robot, String command, List<String> arguments) {
         this.name = robot;
         this.command = command;
