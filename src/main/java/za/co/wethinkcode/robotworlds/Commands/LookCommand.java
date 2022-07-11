@@ -1,126 +1,49 @@
 package za.co.wethinkcode.robotworlds.Commands;
+import org.json.JSONObject;
 import za.co.wethinkcode.robotworlds.Json;
+import za.co.wethinkcode.robotworlds.Server.ErrorHandling;
+import za.co.wethinkcode.robotworlds.Server.MultiServer;
 import za.co.wethinkcode.robotworlds.world.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class LookCommand extends Command {
-    ArrayList <Object> LookAround = new ArrayList<>();
 
-    public Json execute(Robot target) {
+    int myRobotX;
+    int myRobotY;
+    private int myShields;
+    private int myShots;
+
+    public Json execute(Robot target){
 
         if(target.getHasLaunched().equals("null")){
             ErrorHandling error = new ErrorHandling("null", getCommand(), getArgument());
             return error.execute(target);
         }
 
+        target.setStatus("looking");
+
+        for (Map.Entry<String, Json> set : MultiServer.players.entrySet()) {
+            if(set.getKey().equals(target.getName())){
+                myRobotX = (Integer) set.getValue().getJsonData().getJSONObject("state").getJSONArray("position").get(0);
+                myRobotY = (Integer) set.getValue().getJsonData().getJSONObject("state").getJSONArray("position").get(1);
+                myShields = (Integer) set.getValue().getJsonData().getJSONObject("state").get("shields");
+                myShots =  (Integer) set.getValue().getJsonData().getJSONObject("state").get("shots");
+            }
+        }
 
         Json data = new Json();
 
-        IWorld.Direction oldDirection = target.getWorld().getCurrentDirection();
-        target.getWorld().setCurrentDirection(IWorld.Direction.NORTH);
-
-        data.setMap("position", new int[]{target.getWorld().getPosition().getX(), target.getWorld().getPosition().getY()});
-
-
-        if(target.getWorld().getCurrentDirection().equals(IWorld.Direction.NORTH)){
-            Json objects = new Json();
-            objects.setMap("direction",target.getWorld().getCurrentDirection());
-
-            Position newPosition = new Position(target.getWorld().getPosition().getX(),
-                    target.getWorld().getPosition().getY() + target.getVisibility());
-
-            for(Obstacle obstacle : target.getWorld().getObstacles()){
-
-                if(obstacle.blocksPath(target.getWorld().getPosition(),newPosition)){
-                    objects.setMap("type","OBSTACLE");
-                    break;
-                }else {
-                    objects.setMap("type","EDGE");
-                }
-            }
-
-            objects.setMap("distance", (AbstractWorld.TOP_LEFT.getY() - target.getWorld().getPosition().getY()));
-
-            this.LookAround.add(objects.getJsonData());
-            target.getWorld().setCurrentDirection(IWorld.Direction.EAST);
-        }
-        if(target.getWorld().getCurrentDirection().equals(IWorld.Direction.EAST)){
-            Json objects = new Json();
-            objects.setMap("direction",target.getWorld().getCurrentDirection());
-            Position newPosition = new Position(target.getWorld().getPosition().getX() + target.getVisibility(),
-                    target.getWorld().getPosition().getY());
-            for(Obstacle obstacle: target.getWorld().getObstacles()){
-                if(obstacle.blocksPath(target.getWorld().getPosition(),newPosition)){
-                    objects.setMap("type","OBSTACLE");
-                    break;
-                }else {
-                    objects.setMap("type","EDGE");
-                }
-            }
-
-            objects.setMap("distance",(AbstractWorld.BOTTOM_RIGHT.getX() - target.getWorld().getPosition().getX()));
-
-            this.LookAround.add(objects.getJsonData());
-            target.getWorld().setCurrentDirection(IWorld.Direction.SOUTH);
-        }
-        if(target.getWorld().getCurrentDirection().equals(IWorld.Direction.SOUTH)){
-            Json objects = new Json();
-            objects.setMap("direction",target.getWorld().getCurrentDirection());
-            Position newPosition = new Position(target.getWorld().getPosition().getX(),
-                    target.getWorld().getPosition().getY() - target.getVisibility());
-            for(Obstacle obstacle: target.getWorld().getObstacles()){
-                if(obstacle.blocksPath(target.getWorld().getPosition(),newPosition)){
-                    objects.setMap("type","OBSTACLE");
-                    break;
-                }else {
-                    objects.setMap("type","EDGE");
-                }
-            }
-
-            if (target.getWorld().getPosition().getY() < 0){
-                objects.setMap("distance",(AbstractWorld.BOTTOM_RIGHT.getY() - target.getWorld().getPosition().getY()));
-            }else{
-                objects.setMap("distance",(AbstractWorld.BOTTOM_RIGHT.getY() + target.getWorld().getPosition().getY()));
-            }
-
-
-            this.LookAround.add(objects.getJsonData());
-            target.getWorld().setCurrentDirection(IWorld.Direction.WEST);
-        }
-        if(target.getWorld().getCurrentDirection().equals(IWorld.Direction.WEST)){
-            Json objects = new Json();
-            objects.setMap("direction",target.getWorld().getCurrentDirection());
-            Position newPosition = new Position(target.getWorld().getPosition().getX()- target.getVisibility(),
-                    target.getWorld().getPosition().getY());
-            for(Obstacle obstacle: target.getWorld().getObstacles()){
-                if(obstacle.blocksPath(target.getWorld().getPosition(),newPosition)){
-                    objects.setMap("type","OBSTACLE");
-                    break;
-                }else {
-                    objects.setMap("type","EDGE");
-                }
-            }
-
-            if(target.getWorld().getPosition().getX() > 0){
-                objects.setMap("distance",(AbstractWorld.TOP_LEFT.getX() - target.getWorld().getPosition().getX()));
-            }else{
-                objects.setMap("distance",(AbstractWorld.TOP_LEFT.getX() + target.getWorld().getPosition().getX()));
-            }
-
-            this.LookAround.add(objects.getJsonData());
-            target.getWorld().setCurrentDirection(oldDirection);
-        }
-
         data.setMap("visibility",target.getVisibility());
-        data.setMap("objects",this.LookAround);
+        data.setMap("objects",responseSetDirection(target));
 
         Json state = new Json();
-        state.setMap("position", new int[]{target.getWorld().getPosition().getX(), target.getWorld().getPosition().getY()});
+        state.setMap("position", new int[]{myRobotX, myRobotY});
         state.setMap("direction", target.getWorld().getCurrentDirection());
-        state.setMap("shields", target.getShield());
-        state.setMap("shots", target.getShots());
+        state.setMap("shields", myShields);
+        state.setMap("shots", myShots);
         state.setMap("status", "normal");
 
         Json jData = new Json();
@@ -130,7 +53,118 @@ public class LookCommand extends Command {
 
         return jData;
     }
+    public JSONObject lookNorth(Robot target){
+
+        Json objects = new Json();
+
+        objects.setMap("direction",target.getWorld().getCurrentDirection());
+        int nrsteps = myRobotY + target.getVisibility();
+        Position newPosition = new Position(myRobotX, nrsteps);
+
+        IWorld.UpdateResponse response = target.getWorld().isRobotOrObstacleNear(target,newPosition);
+
+        if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED_ROBOT)){
+            objects.setMap("type","ROBOT");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getOtherRobotY(), myRobotY));
+        }else if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED)){
+            objects.setMap("type","OBSTACLE");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getObstacleY(), myRobotY));
+        }else{
+            objects.setMap("type","EDGE");
+            objects.setMap("distance",responseDistance(target, AbstractWorld.TOP_LEFT.getY(), myRobotY));
+        }
+        target.getWorld().setCurrentDirection(IWorld.Direction.EAST);
+        return objects.getJsonData();
+    }
+
+    public JSONObject lookEast(Robot target){
+
+        Json objects = new Json();
+        objects.setMap("direction",target.getWorld().getCurrentDirection());
+        int nrsteps = myRobotX + target.getVisibility();
+        Position newPosition = new Position(nrsteps, myRobotY);
+
+        IWorld.UpdateResponse response = target.getWorld().isRobotOrObstacleNear(target,newPosition);
+
+        if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED_ROBOT)){
+            objects.setMap("type","ROBOT");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getOtherRobotX(), myRobotX));
+        }else if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED)){
+            objects.setMap("type","OBSTACLE");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getObstacleX(), myRobotX));
+        }else{
+            objects.setMap("type","EDGE");
+            objects.setMap("distance",responseDistance(target, AbstractWorld.BOTTOM_RIGHT.getX(), myRobotX));
+        }
+        target.getWorld().setCurrentDirection(IWorld.Direction.SOUTH);
+        return objects.getJsonData();
+
+    }
+    public JSONObject lookSouth(Robot target){
+
+        Json objects = new Json();
+
+        objects.setMap("direction",target.getWorld().getCurrentDirection());
+        int nrsteps = myRobotY - target.getVisibility();
+        Position newPosition = new Position(myRobotX, nrsteps);
+
+        IWorld.UpdateResponse response = target.getWorld().isRobotOrObstacleNear(target,newPosition);
+        if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED_ROBOT)){
+            objects.setMap("type","ROBOT");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getOtherRobotY(), myRobotY));
+        }else if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED)){
+            objects.setMap("type","OBSTACLE");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getObstacleY(), myRobotY));
+        }else{
+            objects.setMap("type","EDGE");
+            objects.setMap("distance",responseDistance(target, AbstractWorld.BOTTOM_RIGHT.getY(), myRobotY));
+        }
+        target.getWorld().setCurrentDirection(IWorld.Direction.WEST);
+        return objects.getJsonData();
+    }
+    public JSONObject lookWest(Robot target, IWorld.Direction originalDirection){
+
+        Json objects = new Json();
+        objects.setMap("direction",target.getWorld().getCurrentDirection());
+
+        int nrsteps = myRobotX - target.getVisibility();
+        Position newPosition = new Position(nrsteps, myRobotY);
+
+        IWorld.UpdateResponse response = target.getWorld().isRobotOrObstacleNear(target,newPosition);
+        if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED_ROBOT)){
+            objects.setMap("type","ROBOT");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getOtherRobotX(), myRobotX));
+        }else if(response.equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED)){
+            objects.setMap("type","OBSTACLE");
+            objects.setMap("distance",responseDistance(target, target.getWorld().getObstacleX(), myRobotX));
+        }else{
+            objects.setMap("type","EDGE");
+            objects.setMap("distance",responseDistance(target, AbstractWorld.TOP_LEFT.getX(), myRobotX));
+
+        }
+        target.getWorld().setCurrentDirection(originalDirection);
+        return objects.getJsonData();
+    }
+
+    public int responseDistance(Robot target, int objectDistance, int myRobotDistance){
+        return (myRobotDistance)-objectDistance;
+    }
+
+    public ArrayList<Object> responseSetDirection(Robot target){
+
+        ArrayList <Object> LookAround = new ArrayList<>();
+        IWorld.Direction originalDirection = target.getWorld().getCurrentDirection();
+        target.getWorld().setCurrentDirection(IWorld.Direction.NORTH);
+        LookAround.add(lookNorth(target));
+        LookAround.add(lookSouth(target));
+        LookAround.add(lookEast(target));
+        LookAround.add(lookWest(target, originalDirection));
+
+        return LookAround;
+    }
+
     public LookCommand(String command, List<String> argument) {
         super("look",command,argument);
     }
 }
+
