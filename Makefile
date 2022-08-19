@@ -1,54 +1,29 @@
 .PHONY: start-server
 
-
 start-server: clean
 
-clean: server_ser.pid
-	test -f server_ser.pid && kill -9 `cat server_ser,pid` && rn server_ser.pid || true
+clean: myServer_CommandLineWithObstacles
+	test -f myServer_CommandLineWithObstacles && kill -9 `cat myServer_CommandLineWithObstacles` && rm myServer_CommandLineWithObstacles || true
 
-server.pid:
+
+myServer_noCommandLine.pid:
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/world/ReadConfigFileTest.java"
+	java -jar target/Brown_Fields-1.1-jar-with-dependencies.jar & echo $$! > $@
 	mvn compile
-	java -jar libs/reference-server-0.1.0.jar -s 1 & echo $$! > $@
-	mvn test
-	mvn package
-
-server_ser.pid: server.pid
-	test -f server_ser.pid && kill -9 `cat server_ser,pid` && rn server_ser.pid || true
-	java -jar target/src-1.0-SNAPSHOT-jar-with-dependencies.jar
-	mvn test
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World1x1/ForwardRobotTests.java"
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World1x1/LaunchRobotTests.java"
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World1x1/StateRobotTests.java"
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World1x1/LookRobotTests.java"
 
 
-server_ser2.pid:
+myServer_CommandLineWithObstacles: myServer_noCommandLine.pid
+	test -f myServer_noCommandLine.pid && kill -9 `cat myServer_noCommandLine.pid` && rm -f myServer_noCommandLine.pid || true
 	mvn compile
-	java -jar libs/reference-server-0.2.3.jar -s 1  & echo $$! > $@
-	mvn test
-	mvn package
-
-server_ser3.pid:
-	mvn compile
-	java -jar libs/reference-server-0.2.3.jar -s 2 -o 1,1  & echo $$! > $@
-	mvn test
+	java -jar target/Brown_Fields-1.1-jar-with-dependencies.jar -p 5000 -s 2 -o 1,1 & echo $$! > $@
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World2x2/ForwardRobotTests.java"
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World2x2/LaunchRobotTests.java"
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World2x2/StateRobotTests.java"
+	mvn test -Dtest="za/co/wethinkcode/robotworlds/World2x2/LookRobotTests.java"
 	mvn package
 
 
-
-#VERSION := $(shell cat package.json | awk '/"version":/ {gsub(/("|",)/,"",$$2);print $$2};')
-#
-#tag:
-#	git tag -f $(VERSION)
-#
-#version-list:
-#	git tag --list
-
-
-#ifeq ($(VERSION),)
-#     VERSION:=$(shell git describe --tags --abbrev=0 | awk -F .   '{OFS="."; $$NF+=1; print}')
-#endif:
-#
-#tag:
-#	git checkout integration
-#	echo $(VERSION)
-#	git tag $(VERSION)
-#	#git push --tags
-#
-#endif
