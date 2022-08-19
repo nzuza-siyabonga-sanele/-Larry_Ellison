@@ -1,74 +1,35 @@
 package za.co.wethinkcode.robotworlds;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * A basic interface that wraps the expected Robot Worlds API so that we can easily connect to and send requests to the server.
+ */
+public interface RobotWorldClient {
+    /**
+     * Connects to the Robot Worlds server on specified ip address and port
+     * @param ipAddress either `localhost` or actual IP address
+     * @param port port that server is configured to receive connections on
+     */
+    void connect(String ipAddress, int port);
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.net.Socket;
+    /**
+     * Checks if client is connected to server
+     * @return
+     */
+    boolean isConnected();
 
-public class RobotWorldJsonClient implements RobotWorldClient{
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    /**
+     * Disconnect from server
+     */
+    void disconnect();
 
-    private Socket socket;
-    private PrintStream out;
-    private BufferedReader in;
+    /**
+     * Sends a request presented by the Json object to the server
+     * @param requestJsonString a String representing the Json string to send to server
+     * @return the response as a JsonNode
+     */
+    JsonNode sendRequest(String requestJsonString);
 
-    @Override
-    public void connect(String ipAddress, int port) {
-        try {
-            socket = new Socket(ipAddress, port);
-            out = new PrintStream(socket.getOutputStream());
-            in = new BufferedReader(new InputStreamReader(
-                    socket.getInputStream()));
-        } catch (IOException e) {
-            //error connecting should just throw Runtime error and fail test
-            throw new RuntimeException("Error connecting to Robot Worlds server.", e);
-        }
-    }
-
-    @Override
-    public boolean isConnected() {
-        return socket.isConnected();
-    }
-
-    @Override
-    public void disconnect() {
-        try {
-            out.close();
-            in.close();
-            socket.close();
-        } catch (IOException e) {
-            //error connecting should just throw Runtime error and fail test
-            throw new RuntimeException("Error disconnecting from Robot Worlds server.", e);
-        }
-    }
-
-    @Override
-    public JsonNode sendRequest(String requestJsonString) {
-        try {
-            out.println(requestJsonString);
-            out.flush();
-            return OBJECT_MAPPER.readTree(in.readLine());
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("Error parsing server response as JSON.", e);
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading server response.", e);
-        }
-    }
-
-    @Override
-    public String sendRequestAsString(String requestString) {
-        try {
-            out.println(requestString);
-            out.flush();
-            return in.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException("Error reading server response.", e);
-        }
-    }
+    String sendRequestAsString(String requestString);
 }
