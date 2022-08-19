@@ -6,6 +6,7 @@ import java.util.List;
  * Your Text and Turtle worlds must implement this interface.
  */
 public interface IWorld {
+
     /**
      * Enum used to track direction
      */
@@ -19,17 +20,20 @@ public interface IWorld {
     enum UpdateResponse {
         SUCCESS, //position was updated successfully
         FAILED_OUTSIDE_WORLD, //robot will go outside world limits if allowed, so it failed to update the position
-        FAILED_OBSTRUCTED, //robot obstructed by at least one obstacle, thus cannot proceed.
+        FAILED_OBSTRUCTED,
+        FAILED_OBSTRUCTED_ROBOT, //robot obstructed by at least one obstacle, thus cannot proceed.
     }
 
     Position CENTRE = new Position(0,0);
 
     /**
      * Updates the position of your robot in the world by moving the nrSteps in the robots current direction.
-     * @param nrSteps steps to move in current direction
+     *
+     * @param nrSteps  steps to move in current direction
+     * @param target
      * @return true if this does not take the robot over the world's limits, or into an obstacle.
      */
-    UpdateResponse updatePosition(int nrSteps);
+    UpdateResponse updatePosition(int nrSteps, Robot target);
 
     /**
      * Updates the current direction your robot is facing in the world by cycling through the directions UP, RIGHT, BOTTOM, LEFT.
@@ -86,11 +90,14 @@ public interface IWorld {
      */
     void showObstacles();
 
-    void SetPositions(int tlx, int tly, int blx, int bly);
+    void SetPositions(int topLeftX, int topLeftY, int bottomRightX, int bottomRightY);
 
     /**
      * Shoots the obstacle:
      * - Removes obstacle
      */
     void removeObstacle(Robot target);
+
 }
+
+
