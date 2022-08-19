@@ -9,7 +9,7 @@ public class SquareObstacle implements Obstacle {
     public SquareObstacle(int x, int y) {
         this.x=x;
         this.y=y;
-        this.size=5;
+//        this.size=5;
     }
 
     @Override
@@ -37,6 +37,7 @@ public class SquareObstacle implements Obstacle {
 
     @Override
     public boolean blocksPath(Position a, Position b) {
+
         int xAxisMin =Math.min(a.getX(),b.getX());
         int xAxisMax =Math.max(a.getX(),b.getX());
         int yAxisMin =Math.min(a.getY(),b.getY());
@@ -55,4 +56,5 @@ public class SquareObstacle implements Obstacle {
         }
         return false;
     }
+    public String toString() {return "["+this.x+","+this.y+"]";}
 }
