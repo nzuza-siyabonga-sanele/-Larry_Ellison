@@ -36,4 +36,9 @@ public class Position {
         boolean withinRight = this.x <= bottomRight.getX();
         return withinTop && withinBottom && withinLeft && withinRight;
     }
+    public String toString() {
+
+        return "["+this.x+","+this.y+"]";
+    }
+
 }
