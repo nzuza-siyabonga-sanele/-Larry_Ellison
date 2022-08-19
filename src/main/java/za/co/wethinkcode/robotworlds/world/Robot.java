@@ -10,20 +10,18 @@ import java.util.Properties;
 
 public class Robot {
 
-    private final int visibility;
+    private int visibility;
     private String status;
     private String name;
     private int shots;
     private int shield;
     private ArrayList<String> History;
-    IWorld world;
 
-
-    public Robot(String name, IWorld world, Properties configFile) {
-        this.world = world;
+    public Robot(String name) {
         this.name = name;
         this.status = "Ready";
-        this.visibility = Integer.parseInt(configFile.getProperty("visibility"));
+        this.visibility = 5;
+
     }
 
     public String getHasLaunched() {return Server.hasLaunched;}
@@ -67,8 +65,8 @@ public class Robot {
 
     @Override
     public String toString() {
-        return "[" + this.getWorld().getPosition().getX() + "," + this.getWorld().getPosition().getY() + "] "
-                + this.name + "> " + this.status;
+       return "[" + this.getWorld().getPosition().getX() + "," + this.getWorld().getPosition().getY() + "] "
+               + this.name + "> " + this.status;
     }
 
     public void setStatus(String status) {
@@ -79,10 +77,10 @@ public class Robot {
         return name;
     }
 
-    public IWorld getWorld() {
-        return this.world;
+    public AbstractWorld getWorld() {
+        return World.getWorld();
     }
-
+    
     public void setShieldAndShots(String shield, String shot) {
         this.shield = Integer.parseInt(shield);
         this.shots = Integer.parseInt(shot);
