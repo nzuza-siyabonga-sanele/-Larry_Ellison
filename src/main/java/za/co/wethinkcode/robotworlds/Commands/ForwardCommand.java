@@ -1,13 +1,17 @@
 package za.co.wethinkcode.robotworlds.Commands;
 
 import za.co.wethinkcode.robotworlds.Json;
-import za.co.wethinkcode.robotworlds.world.Robot;
+import za.co.wethinkcode.robotworlds.Server.MultiServer;
 import za.co.wethinkcode.robotworlds.world.IWorld;
+import za.co.wethinkcode.robotworlds.world.Robot;
 
 import java.util.List;
+import java.util.Map;
 
 public class ForwardCommand extends Command{
-
+    private Integer myShields;
+    private Integer myShots;
+    private Object myDirection;
 
     @Override
     public Json execute(Robot target) {
@@ -16,28 +20,32 @@ public class ForwardCommand extends Command{
 
         Json data = new Json();
 
-        if (target.getWorld().updatePosition(nrSteps).equals(IWorld.UpdateResponse.SUCCESS)) {
+        for (Map.Entry<String, Json> set : MultiServer.listOfplayers.entrySet()) {
+            if(set.getKey().equals(target.getName())){
 
+                myShields = (Integer) set.getValue().getJsonData().getJSONObject("state").get("shields");
+                myShots =  (Integer) set.getValue().getJsonData().getJSONObject("state").get("shots");
+                myDirection =  set.getValue().getJsonData().getJSONObject("state").get("direction");
+            }
+        }
+
+        if (target.getWorld().updatePosition(nrSteps, target).equals(IWorld.UpdateResponse.SUCCESS)) {
             data.setMap("message", "Done");
-            target.setStatus("Moved forward by "+nrSteps+" steps.");
 
+        }else if (target.getWorld().updatePosition(nrSteps, target).equals(IWorld.UpdateResponse.FAILED_OUTSIDE_WORLD)) {
 
-        }else if (target.getWorld().updatePosition(nrSteps).equals(IWorld.UpdateResponse.FAILED_OUTSIDE_WORLD)) {
+            data.setMap("message", "At the "+ myDirection+" edge");
 
-            data.setMap("message", "EDGE");
-            target.setStatus("Sorry, I cannot go outside my safe zone.");
-
-        }else if (target.getWorld().updatePosition(nrSteps).equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED)) {
-
-            data.setMap("message", "Done");
-            target.setStatus("Sorry, there is an obstacle in the way.");}
+        }else if (target.getWorld().updatePosition(nrSteps, target).equals(IWorld.UpdateResponse.FAILED_OBSTRUCTED)) {
+            data.setMap("message", "Obstructed");
+        }
 
         Json state = new Json();
 
-        state.setMap("position", "[" + String.valueOf(target.getWorld().getPosition().getX()) + "," + String.valueOf(target.getWorld().getPosition().getY()) + "]");
-        state.setMap("direction", target.getWorld().getCurrentDirection());
-        state.setMap("shields", target.getShield());
-        state.setMap("shots", target.getShots());
+        state.setMap("position", new int[]{target.getWorld().getPosition().getX(), target.getWorld().getPosition().getY()});
+        state.setMap("direction", myDirection);
+        state.setMap("shields", myShields);
+        state.setMap("shots", myShots);
         state.setMap("status", "normal");
 
         Json jData = new Json();
@@ -45,6 +53,7 @@ public class ForwardCommand extends Command{
         jData.setMap("data", data.getJsonData());
         jData.setMap("state", state.getJsonData());
 
+        MultiServer.listOfplayers.put(target.getName(),jData);
         return jData;
     }
 
