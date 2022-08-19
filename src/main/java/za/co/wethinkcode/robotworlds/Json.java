@@ -20,7 +20,6 @@ public class Json {
     }
 
     public static JsonNode perse(String command) throws JsonProcessingException {
-        System.out.println(getNode().readTree(command));
         return getNode().readTree(command);
     }
 
