@@ -7,10 +7,9 @@ import org.json.JSONObject;
 import za.co.wethinkcode.robotworlds.Commands.Command;
 import za.co.wethinkcode.robotworlds.Commands.createCommand;
 import za.co.wethinkcode.robotworlds.Json;
-import za.co.wethinkcode.robotworlds.MultiServer;
 import za.co.wethinkcode.robotworlds.world.AbstractWorld;
-import za.co.wethinkcode.robotworlds.world.IWorld;
 import za.co.wethinkcode.robotworlds.world.Robot;
+import za.co.wethinkcode.robotworlds.world.World;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -20,15 +19,12 @@ import java.net.Socket;
 import java.util.Scanner;
 
 public class Server implements Runnable {
-
+    
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
     private BufferedReader din;
     private PrintStream dout ;
-
     public static String hasLaunched = "null";
-
-    Robot robot;
-    public static IWorld world;
+    static Robot robot;
     private String in;
     private static Socket socket;
     private String clientMachine;
@@ -42,16 +38,6 @@ public class Server implements Runnable {
             input = scanner.nextLine();
         }
         return input;
-    }
-    public static void setposition(String[] arguments){
-        //-p 5000 -s 100 -o 10,5
-        int bry = -1 * Integer.parseInt(arguments[1])/2;
-        int brx = Integer.parseInt(arguments[0])/2;
-        int tly = Integer.parseInt(arguments[1])/2;
-        int tlx = -1 * Integer.parseInt(arguments[0])/2;
-
-        world.SetPositions(tlx, tly, brx, bry);
-
     }
 
     public Server(Socket socket){
@@ -70,50 +56,43 @@ public class Server implements Runnable {
         System.out.println("Connection from " + clientMachine);
         System.out.println("Waiting for client...");
     }
-
+    
     public void run() {
+            try {
 
-        JsonNode cont;
-        String instruction;
+                // changed the while true loop to while request is not null
+                while ((in = din.readLine()) != null) {
 
-        try {
+                    // called the reciverRequest passing the request from the client
+                    JsonNode cont = receiverRequest(in);
 
-            // changed the while true loop to while request is not null
-            while ((in = din.readLine()) != null) {
+                    dout.println(cont);
+                    dout.flush();
+                }
+                robot.getWorld().setPosition(AbstractWorld.CENTRE);
+                MultiServer.listOfplayers.clear();
 
-                JSONObject out = new JSONObject(in);
-                robot = new Robot(out.getString("robot"), world, MultiServer.configFile);
-
-                // called the reciverRequest passing the request from the client
-                cont = reciverRequest(in);
-
-                dout.println(cont);
-                dout.flush();
+            } catch (IOException ex) {
+                System.out.println("Shutting down single client server");
             }
-            robot.getWorld().setPosition(AbstractWorld.CENTRE);
-            AbstractWorld.players.clear();
-
-        } catch (IOException ex) {
-            System.out.println("Shutting down single client server");
         }
-    }
 
     // Added this method to the server for all the request from the client
-    public JsonNode reciverRequest(String request){
+    public static JsonNode receiverRequest(String request){
 
-        String argName;
-        Command command;
-        Json cont = null;
+        JSONObject out = new JSONObject(request);
+
+        robot = new Robot(out.getString("robot"));
+
         try {
-            argName = ((createCommand)OBJECT_MAPPER.readValue(request, createCommand.class)).returnName();
+            String argName = ((createCommand)OBJECT_MAPPER.readValue(request, createCommand.class)).returnName();
 
-            command = Command.create(argName, createCommand.returnCommand(), createCommand.returnArgument());
-            cont = robot.handleCommand(command);
+            Command command = Command.create(argName, createCommand.returnCommand(), createCommand.returnArgument());
+            Json cont = robot.handleCommand(command);
 
             return OBJECT_MAPPER.readTree(String.valueOf(cont.getJsonData()));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
     }
-
 }
